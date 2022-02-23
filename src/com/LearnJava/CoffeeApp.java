@@ -1,22 +1,35 @@
 package com.LearnJava;
 
     public class CoffeeApp {
-        private static int cupsCoffee;
-        private static int qtyWater;
-        private static int qtyMilk;
-        private static int qtyBeans;
+        private final int cupsCoffee;
+        private final int totalWater;
+        private final int totalMilk;
+        private final int totalBeans;
+        private static final int WATER_PER_CUP = 200;
+        private static final int MILK_PER_CUP = 50;
+        private static final int BEANS_PER_CUP = 15;
 
-        public CoffeeApp(int cupsCoffee) {
+        public CoffeeApp(int cupsCoffee, int totalWater, int totalMilk, int totalBeans) {
             this.cupsCoffee = cupsCoffee;
-            this.qtyWater = cupsCoffee * 200;
-            this.qtyMilk = cupsCoffee * 50;
-            this.qtyBeans = cupsCoffee * 15;
+            this.totalWater = totalWater;
+            this.totalMilk = totalMilk;
+            this.totalBeans = totalBeans;
         }
 
-        public void printIngredients() {
-            System.out.printf("For %d cups of coffee you will need:%n", cupsCoffee);
-            System.out.printf("%d ml of water%n", qtyWater);
-            System.out.printf("%d ml of milk%n", qtyMilk);
-            System.out.printf("%d g of coffee beans%n", qtyBeans);
+        public void calculateCoffeeMaking() {
+            int cupsWater = totalWater / WATER_PER_CUP;
+            int cupsMilk = totalMilk / MILK_PER_CUP;
+            int cupsBeans = totalBeans / BEANS_PER_CUP;
+
+            int minCups = Math.min(cupsWater, Math.min(cupsMilk, cupsBeans));
+
+            if (minCups < cupsCoffee) {
+                System.out.println("No, I can make only " + minCups + " cup(s) of coffee");
+            } else if (minCups == cupsCoffee) {
+                System.out.println("Yes, I can make that amount of coffee");
+            } else {
+                System.out.println("Yes, I can make that amount of coffee (and even " + (minCups - cupsCoffee) + " more than that)");
+            }
+
         }
 }
