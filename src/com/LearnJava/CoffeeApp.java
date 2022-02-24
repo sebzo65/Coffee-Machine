@@ -8,6 +8,7 @@ public class CoffeeApp {
     private static int machineBeans = 120;
     private static int machineDisposableCups = 9;
     private static int machineMoney = 550;
+    private static boolean isFinished = false;
     //Espresso Variables
     private static final int ESPRESSO_WATER_PER_CUP = 250;
     private static final int ESPRESSO_BEANS_PER_CUP = 16;
@@ -27,26 +28,38 @@ public class CoffeeApp {
     public CoffeeApp() {
     }
 
-    public void executeAction(String action, Scanner scanner) {
-        switch (action) {
-            case "buy":
-                drinkMenu(scanner);
-                machineCurrentState();
-                break;
-            case "fill":
-                fillMachine(scanner);
-                machineCurrentState();
-                break;
-            case "take":
-                takeMachineMoney(scanner);
-                machineCurrentState();
-                break;
+    public void executeAction(Scanner scanner) {
+
+        while (isFinished == false) {
+            writeAction();
+            String action = scanner.next();
+            switch (action) {
+                case "buy":
+                    drinkMenu(scanner);
+                    break;
+                case "fill":
+                    fillMachine(scanner);
+                    break;
+                case "take":
+                    takeMachineMoney();
+                    break;
+                case "remaining":
+                    machineCurrentState();
+                    break;
+                case "exit":
+                    isFinished = true;
+            }
         }
+
+    }
+
+    public void writeAction() {
+        System.out.printf("%nWrite action (buy, fill, take, remaining, exit):%n");
     }
 
     //Display current state of coffee machine
     public void machineCurrentState() {
-        System.out.println("The coffee machine has:");
+        System.out.printf("%nThe coffee machine has:%n");
         System.out.printf("%d ml of water%n", machineWater);
         System.out.printf("%d ml of milk%n", machineMilk);
         System.out.printf("%d g of coffee beans%n", machineBeans);
@@ -56,49 +69,108 @@ public class CoffeeApp {
 
     //Display drink menu selection (1 - Buy)
     public void drinkMenu(Scanner scanner) {
-        System.out.println("What do you want to buy? 1 - espresso," +
-                " 2 - latte, 3 - cappuccino:");
-        int userSelection = scanner.nextInt();
 
-        switch (userSelection) {
-            case 1:
-                calculateEspressoCost();
-                break;
-            case 2:
-                calculateLatteCost();
-                break;
-            case 3:
-                calculateCappuccinoCost();
-                break;
+        askDrinkMenu();
+
+        if (scanner.hasNextInt()) {
+
+            switch (scanner.nextInt()) {
+                case 1:
+                    calculateEspressoCost();
+                    executeAction(scanner);
+                    break;
+                case 2:
+                    calculateLatteCost();
+                    executeAction(scanner);
+                    break;
+                case 3:
+                    calculateCappuccinoCost();
+                    executeAction(scanner);
+                    break;
+            }
+        } else {
+            executeAction(scanner);
         }
+    }
+
+    //Ask what drink
+    public void askDrinkMenu() {
+        System.out.printf("%nWhat do you want to buy? 1 - espresso," +
+                " 2 - latte, 3 - cappuccino, back - to main menu:%n");
     }
     //Buy an Espresso
     public void calculateEspressoCost() {
-        machineWater -= ESPRESSO_WATER_PER_CUP;
-        machineBeans -= ESPRESSO_BEANS_PER_CUP;
-        machineMoney += ESPRESSO_PRICE_PER_CUP;
-        machineDisposableCups -= 1;
+        if (machineWater >= ESPRESSO_WATER_PER_CUP &&
+                machineBeans >= ESPRESSO_BEANS_PER_CUP && machineDisposableCups > 0) {
+            System.out.println("I have enough resources, making you a coffee!");
+            machineWater -= ESPRESSO_WATER_PER_CUP;
+            machineBeans -= ESPRESSO_BEANS_PER_CUP;
+            machineMoney += ESPRESSO_PRICE_PER_CUP;
+            machineDisposableCups -= 1;
+        } else {
+            checkIngredientsMissing(ESPRESSO_WATER_PER_CUP, ESPRESSO_BEANS_PER_CUP);
+        }
+
     }
+
+    //Check whether coffee can be made for Espresso
+    public void checkIngredientsMissing(int water, int beans) {
+        if (machineWater < water) {
+            System.out.println("Sorry, not enough water");
+        } else if (machineBeans < beans) {
+            System.out.println("Sorry, not enough beans");
+        } else if (machineDisposableCups < 1) {
+            System.out.println("Sorry, not enough cups");
+        }
+    }
+
     //Buy a latte
     public void calculateLatteCost() {
-        machineWater -= LATTE_WATER_PER_CUP;
-        machineMilk -= LATTE_MILK_PER_CUP;
-        machineBeans -= LATTE_BEANS_PER_CUP;
-        machineMoney += LATTE_PRICE_PER_CUP;
-        machineDisposableCups -= 1;
+        if (machineWater >= LATTE_WATER_PER_CUP &&
+                machineBeans >= LATTE_BEANS_PER_CUP &&
+                machineMilk >= LATTE_MILK_PER_CUP && machineDisposableCups > 0) {
+            System.out.println("I have enough resources, making you a coffee!");
+            machineWater -= LATTE_WATER_PER_CUP;
+            machineBeans -= LATTE_BEANS_PER_CUP;
+            machineMilk -= LATTE_MILK_PER_CUP;
+            machineMoney += LATTE_PRICE_PER_CUP;
+            machineDisposableCups -= 1;
+        } else {
+            checkIngredientsMissing(LATTE_WATER_PER_CUP, LATTE_MILK_PER_CUP, LATTE_BEANS_PER_CUP);
+        }
     }
     //Buy a cappuccino
     public void calculateCappuccinoCost() {
-        machineWater -= CAPCINO_WATER_PER_CUP;
-        machineMilk -= CAPCINO_MILK_PER_CUP;
-        machineBeans -= CAPCINO_BEANS_PER_CUP;
-        machineMoney += CAPCINO_PRICE_PER_CUP;
-        machineDisposableCups -= 1;
+        if (machineWater >= CAPCINO_WATER_PER_CUP &&
+                machineBeans >= CAPCINO_BEANS_PER_CUP &&
+                machineMilk >= CAPCINO_MILK_PER_CUP && machineDisposableCups > 0) {
+            System.out.println("I have enough resources, making you a coffee!");
+            machineWater -= CAPCINO_WATER_PER_CUP;
+            machineBeans -= CAPCINO_BEANS_PER_CUP;
+            machineMilk -= CAPCINO_MILK_PER_CUP;
+            machineMoney += CAPCINO_PRICE_PER_CUP;
+            machineDisposableCups -= 1;
+        } else {
+            checkIngredientsMissing(CAPCINO_WATER_PER_CUP, CAPCINO_MILK_PER_CUP, CAPCINO_BEANS_PER_CUP);
+        }
+    }
+
+    //Check whether coffee can be made
+    public void checkIngredientsMissing(int water, int beans, int milk) {
+        if (machineWater < water) {
+            System.out.println("Sorry, not enough water");
+        } else if (machineMilk < milk) {
+            System.out.println("Sorry, not enough milk");
+        } else if (machineBeans < beans) {
+            System.out.println("Sorry, not enough beans");
+        } else if (machineDisposableCups < 1) {
+            System.out.println("Sorry, not enough cups");
+        }
     }
 
     //Refill machine ingredients (2 - Fill)
     public void fillMachine(Scanner scanner) {
-        System.out.println("Write how many ml of water you want to add:");
+        System.out.printf("%nWrite how many ml of water you want to add:%n");
         int addWater = scanner.nextInt();
         machineWater += addWater;
         System.out.println("Write how many ml of milk you want to add:");
@@ -113,8 +185,8 @@ public class CoffeeApp {
     }
 
     //Take money from machine (3 - Take)
-    public void takeMachineMoney(Scanner scanner) {
-        System.out.printf("I gave you $%d", machineMoney);
+    public void takeMachineMoney() {
+        System.out.printf("%nI gave you $%d%n", machineMoney);
         machineMoney -= machineMoney;
     }
 

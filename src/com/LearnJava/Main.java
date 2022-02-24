@@ -8,10 +8,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         CoffeeApp coffeeApp = new CoffeeApp();
-        coffeeApp.machineCurrentState();
-
-        System.out.printf("%nWrite action (buy, fill, take):");
-        String action = scanner.nextLine();
-        coffeeApp.executeAction(action, scanner);
+        coffeeApp.executeAction(scanner);
     }
 }
