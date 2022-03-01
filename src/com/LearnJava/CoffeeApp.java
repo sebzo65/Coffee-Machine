@@ -9,21 +9,6 @@ public class CoffeeApp {
     private static int machineDisposableCups = 9;
     private static int machineMoney = 550;
     private static boolean isFinished = false;
-    //Espresso Variables
-    private static final int ESPRESSO_WATER_PER_CUP = 250;
-    private static final int ESPRESSO_BEANS_PER_CUP = 16;
-    private static final int ESPRESSO_PRICE_PER_CUP = 4;
-    //Latte Variables
-    private static final int LATTE_WATER_PER_CUP = 350;
-    private static final int LATTE_MILK_PER_CUP = 75;
-    private static final int LATTE_BEANS_PER_CUP = 20;
-    private static final int LATTE_PRICE_PER_CUP = 7;
-    //Cappuccino Variables
-    private static final int CAPCINO_WATER_PER_CUP = 200;
-    private static final int CAPCINO_MILK_PER_CUP = 100;
-    private static final int CAPCINO_BEANS_PER_CUP = 12;
-    private static final int CAPCINO_PRICE_PER_CUP = 6;
-
 
     public CoffeeApp() {
     }
@@ -100,15 +85,15 @@ public class CoffeeApp {
     }
     //Buy an Espresso
     public void calculateEspressoCost() {
-        if (machineWater >= ESPRESSO_WATER_PER_CUP &&
-                machineBeans >= ESPRESSO_BEANS_PER_CUP && machineDisposableCups > 0) {
+        if (machineWater >= Coffee.ESPRESSO.getWater() &&
+                machineBeans >= Coffee.ESPRESSO.getBeans() && machineDisposableCups > 0) {
             System.out.println("I have enough resources, making you a coffee!");
-            machineWater -= ESPRESSO_WATER_PER_CUP;
-            machineBeans -= ESPRESSO_BEANS_PER_CUP;
-            machineMoney += ESPRESSO_PRICE_PER_CUP;
+            machineWater -= Coffee.ESPRESSO.getWater();
+            machineBeans -= Coffee.ESPRESSO.getBeans();
+            machineMoney += Coffee.ESPRESSO.getPrice();
             machineDisposableCups -= 1;
         } else {
-            checkIngredientsMissing(ESPRESSO_WATER_PER_CUP, ESPRESSO_BEANS_PER_CUP);
+            checkIngredientsMissing(Coffee.ESPRESSO.getWater(), Coffee.ESPRESSO.getBeans());
         }
 
     }
@@ -126,32 +111,34 @@ public class CoffeeApp {
 
     //Buy a latte
     public void calculateLatteCost() {
-        if (machineWater >= LATTE_WATER_PER_CUP &&
-                machineBeans >= LATTE_BEANS_PER_CUP &&
-                machineMilk >= LATTE_MILK_PER_CUP && machineDisposableCups > 0) {
+        if (machineWater >= Coffee.LATTE.getWater() &&
+                machineBeans >= Coffee.LATTE.getBeans() &&
+                machineMilk >= Coffee.LATTE.getMilk() && machineDisposableCups > 0) {
             System.out.println("I have enough resources, making you a coffee!");
-            machineWater -= LATTE_WATER_PER_CUP;
-            machineBeans -= LATTE_BEANS_PER_CUP;
-            machineMilk -= LATTE_MILK_PER_CUP;
-            machineMoney += LATTE_PRICE_PER_CUP;
+            machineWater -= Coffee.LATTE.getWater();
+            machineBeans -= Coffee.LATTE.getBeans();
+            machineMilk -= Coffee.LATTE.getMilk();
+            machineMoney += Coffee.LATTE.getPrice();
             machineDisposableCups -= 1;
         } else {
-            checkIngredientsMissing(LATTE_WATER_PER_CUP, LATTE_MILK_PER_CUP, LATTE_BEANS_PER_CUP);
+            checkIngredientsMissing(Coffee.LATTE.getWater(), Coffee.LATTE.getMilk(),
+                    Coffee.LATTE.getBeans());
         }
     }
     //Buy a cappuccino
     public void calculateCappuccinoCost() {
-        if (machineWater >= CAPCINO_WATER_PER_CUP &&
-                machineBeans >= CAPCINO_BEANS_PER_CUP &&
-                machineMilk >= CAPCINO_MILK_PER_CUP && machineDisposableCups > 0) {
+        if (machineWater >= Coffee.CAPPUCCINO.getWater() &&
+                machineBeans >= Coffee.CAPPUCCINO.getBeans() &&
+                machineMilk >= Coffee.CAPPUCCINO.getMilk() && machineDisposableCups > 0) {
             System.out.println("I have enough resources, making you a coffee!");
-            machineWater -= CAPCINO_WATER_PER_CUP;
-            machineBeans -= CAPCINO_BEANS_PER_CUP;
-            machineMilk -= CAPCINO_MILK_PER_CUP;
-            machineMoney += CAPCINO_PRICE_PER_CUP;
+            machineWater -= Coffee.CAPPUCCINO.getWater();
+            machineBeans -= Coffee.CAPPUCCINO.getBeans();
+            machineMilk -= Coffee.CAPPUCCINO.getMilk();
+            machineMoney += Coffee.CAPPUCCINO.getPrice();
             machineDisposableCups -= 1;
         } else {
-            checkIngredientsMissing(CAPCINO_WATER_PER_CUP, CAPCINO_MILK_PER_CUP, CAPCINO_BEANS_PER_CUP);
+            checkIngredientsMissing(Coffee.CAPPUCCINO.getWater(), Coffee.CAPPUCCINO.getMilk(),
+                    Coffee.CAPPUCCINO.getBeans());
         }
     }
 
